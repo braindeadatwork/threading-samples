@@ -5,7 +5,9 @@ public class MainWaitsToDie {
 		for (int i = 1; i <= 10; i++) {
 			Thread t = new Thread(new Thread2("::Thread::" + i));
 			t.start();
-			t.join();
+			t.join();// this means main waits for this to die before doing
+						// anything else. effectively stopping the creation of
+						// next thread
 		}
 		System.out.println("*******Thread " + Thread.currentThread().getName()
 				+ " will die now*******");
