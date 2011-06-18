@@ -2,12 +2,16 @@ package com.samples.threading;
 
 public class MainWaitsToDie {
 	public static void main(String[] args) throws Exception {
-		for (int i = 1; i <= 10; i++) {
-			Thread t = new Thread(new Thread2("::Thread::" + i));
-			t.start();
-			t.join();// this means main waits for this to die before doing
-						// anything else. effectively stopping the creation of
-						// next thread
+		Thread[] threads = new Thread[10];
+		for (int i = 0; i < 10; i++) {
+			threads[i] = new Thread(new Thread2("::Thread::" + i));// Make some
+																	// threads
+		}
+		for (int i = 0; i < 10; i++) {
+			threads[i].start();// start em
+		}
+		for (int i = 0; i < 10; i++) {
+			threads[i].join();// main will live till end!! yippee
 		}
 		System.out.println("*******Thread " + Thread.currentThread().getName()
 				+ " will die now*******");
@@ -30,7 +34,6 @@ class Thread2 implements Runnable {
 	public void run() {
 		System.out.println("Thread " + Thread.currentThread().getName()
 				+ " going to sleep for 1s.");
-		System.err.println();
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {
