@@ -12,19 +12,15 @@
      http://www.springframework.org/schema/context 
     http://www.springframework.org/schema/context/spring-context-3.0.xsd">
 
-	<context:component-scan base-package="com.samples.sample1" />
+	<context:component-scan base-package="com.samples.sample1.service" />
+	<context:component-scan base-package="com.samples.sample1.domain" />
+	<context:component-scan base-package="com.samples.sample1.integration" />
+
 	<int:channel id="input" datatype="java.lang.Integer"></int:channel>
+	<int:channel id="output" datatype="com.samples.sample1.domain.Person">
+		<int:queue capacity="10" />
+	</int:channel>
 
-	<int:channel id="output" datatype="com.samples.sample1.domain.Person"></int:channel>
-
-	<int-jms:outbound-channel-adapter id="jmsOut"
-		channel="input" destination-name="test.queue">
-	</int-jms:outbound-channel-adapter>
-
-	<int-jms:message-driven-channel-adapter
-		id="jmsIn" channel="output" destination-name="test.queue" />
-
-	<int:service-activator id="messageHandler"
-		input-channel="output" ref="jmsHandler">
-	</int:service-activator>
+	<int:service-activator input-channel="input"
+		output-channel="output" ref="messageHandler" />
 </beans>
